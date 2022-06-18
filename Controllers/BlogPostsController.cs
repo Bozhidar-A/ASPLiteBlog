@@ -25,8 +25,8 @@ namespace ASPLiteBlog.Controllers
         // GET: BlogPosts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.BlogPost.Include(b => b.user);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = await _context.BlogPost.Include(b => b.user).ToListAsync();
+            return View(applicationDbContext);
         }
 
         // GET: BlogPosts/Details/5
@@ -60,23 +60,97 @@ namespace ASPLiteBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,title,body")] BlogPost blogPost)
+        public async Task<IActionResult> Create([Bind("ID,title,body")] BlogPost blogPost, IFormFile formFile)
         {
             blogPost.userID = _userManager.GetUserId(User);
             //use this to get the userID and link the user to the model
 
             ModelState.Remove("user");
-            ModelState.Remove("userID");
+            ModelState.Remove("userID"); 
+            ModelState.Remove("previewPicLocation");
             //ModelState validation complains when user or userID are not passed into the function, we do this here
-            //these are not error, delete and ignore
+            //these are not errors, delete and ignore
             if (ModelState.IsValid)
             {
+                blogPost.previewPicLocation = UploadFile(formFile);
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             //ViewData["userID"] = new SelectList(_context.Users, "Id", "Id", blogPost.userID);
             return View(blogPost);
+        }
+
+        public IActionResult UploadFileTinyMCE()
+        {
+            IFormFile ufile = Request.Form.Files[0];
+            if (ufile != null && ufile.Length > 0)
+            {
+                //makes sure the file has a safe name to store
+                var fileName = Guid.NewGuid().ToString();
+                fileName += Path.GetExtension(ufile.FileName);
+
+                //gets file path to wwwroot media 
+                //NEEDS app.UseStaticFiles() in Startup.cs to work
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/media");
+
+                //create if not there
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+
+                //combine both
+                filePath = Path.Combine(filePath, fileName);
+
+                //write to folder
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    ufile.CopyTo(fileStream);
+                }
+
+                //wwwroot is used for static content like this
+                //return json that tinymce can understand and load
+                return Json(new { location = "/media/" + fileName });
+            }
+            return Json(new { location = "Not Found" });
+        }
+        /*
+         * The TinyMCE NuGet packages are broken since an update to the store?
+         * By calling it in js (the official way) and giving a public function
+         * that returns Json is the way I got it working
+         * I was told to use HttpPostFile or something like that as an argument,
+         * that was depricated
+         */
+
+        [HttpPost]
+        public string UploadFile(IFormFile ufile)
+        {
+            //makes sure the file has a safe name to store
+            var fileName = Guid.NewGuid().ToString();
+            fileName += Path.GetExtension(ufile.FileName);
+
+            //gets file path to wwwroot media 
+            //NEEDS app.UseStaticFiles() in Startup.cs to work
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/media");
+
+            //create if not there
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+
+            //combine both
+            filePath = Path.Combine(filePath, fileName);
+
+            //write to folder
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                ufile.CopyTo(fileStream);
+            }
+
+            //wwwroot is used for static content like this
+            return "media/" + fileName; 
         }
 
         // GET: BlogPosts/Edit/5

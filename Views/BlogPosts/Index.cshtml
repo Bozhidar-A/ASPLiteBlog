@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ASPLiteBlog.Models.BlogPost>
+﻿@*@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env*@
+@model IEnumerable<ASPLiteBlog.Models.BlogPost>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,6 +13,9 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.previewPicLocation)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.title)
             </th>
@@ -27,6 +31,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                <img src="~/@item.previewPicLocation" />
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.title)
             </td>

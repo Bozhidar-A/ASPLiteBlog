@@ -22,6 +22,8 @@
         remove_script_host: false,
         paste_data_images: true,
         //without relative and host scipts in .net core <img> are broken
+
+        images_upload_url: "@Url.Action("UploadFileTinyMCE", "Posts")"
     });        
 </script>
 
@@ -31,12 +33,16 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data" id="blogPostForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
                 <input asp-for="title" class="form-control" />
                 <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+            <div>
+                <label for="formFile">Preview Picture</label>
+                <input name="formFile" required type="file"/>
             </div>
             <div class="form-group">
                 <label asp-for="body" class="control-label"></label>
