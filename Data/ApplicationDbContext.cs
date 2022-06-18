@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ASPLiteBlog.Models;
 
 namespace ASPLiteBlog.Data
 {
@@ -9,5 +10,6 @@ namespace ASPLiteBlog.Data
             : base(options)
         {
         }
+        public DbSet<ASPLiteBlog.Models.BlogPost>? BlogPost { get; set; }
     }
 }
