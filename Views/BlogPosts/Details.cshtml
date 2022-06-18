@@ -3,6 +3,21 @@
 @{
     ViewData["Title"] = "Details";
 }
+<link rel="stylesheet" type="text/css" href="~/lib/prism/prism.css">
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: "div#tinymcebox",
+        plugins: "codesample",
+        entity_encoding: 'raw',
+        inline: true,
+        file_browser_callback: true,
+        relative_urls: false,
+        remove_script_host: false,
+        readonly: 1
+    });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
 <h1>Details</h1>
 
@@ -19,8 +34,13 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.body)
         </dt>
-        <dd class = "col-sm-10">
+        @*<dd class = "col-sm-10">
             @Html.DisplayFor(model => model.body)
+        </dd>*@
+         <dd class="col-sm-10">
+            <div id="tinymcebox">
+                @Html.Raw(Model.body)
+            </div>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.user)
