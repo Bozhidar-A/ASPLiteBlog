@@ -60,8 +60,10 @@ namespace ASPLiteBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,title,body")] BlogPost blogPost, IFormFile formFile)
+        public async Task<IActionResult> Create([Bind("ID,title,body,draft")] BlogPost blogPost, IFormFile formFile)
         {
+            //var cultureInvariant = CultureInfo.InvariantCulture;
+
             blogPost.userID = _userManager.GetUserId(User);
             //use this to get the userID and link the user to the model
 
@@ -72,6 +74,11 @@ namespace ASPLiteBlog.Controllers
             //these are not errors, delete and ignore
             if (ModelState.IsValid)
             {
+                if (!blogPost.draft)
+                {
+                    blogPost.timePublished = DateTime.UtcNow;
+                }
+
                 blogPost.previewPicLocation = UploadFile(formFile);
                 _context.Add(blogPost);
                 await _context.SaveChangesAsync();
@@ -175,17 +182,61 @@ namespace ASPLiteBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,title,body,userID")] BlogPost blogPost)
+        public async Task<IActionResult> Edit(int id, [Bind("ID," +
+            "title," +
+            "body," +
+            "draft," +
+            "timeCreated," +
+            "timeLastEdited," +
+            "timePublished," +
+            "timeLastEditedPublished," +
+            "userID")] BlogPost blogPost, IFormFile? formFile, string oldPreviewPicLoc)
         {
             if (id != blogPost.ID)
             {
                 return NotFound();
             }
 
+            ModelState.Remove("user");
+            ModelState.Remove("userID");
+            ModelState.Remove("previewPicLocation");
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (blogPost.draft)
+                    {
+                        blogPost.timeLastEdited = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        if(blogPost.timePublished == null)
+                        {
+                            blogPost.timePublished = DateTime.UtcNow;
+                        }
+                        else
+                        {
+                            blogPost.timeLastEditedPublished = DateTime.UtcNow;
+                        }
+                    }
+
+                    if (formFile != null)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", oldPreviewPicLoc);
+
+                        //this check shouldn't be necessary 
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+
+                        blogPost.previewPicLocation = UploadFile(formFile);
+                    }
+                    else
+                    {
+                        blogPost.previewPicLocation = oldPreviewPicLoc;
+                    }
+
                     _context.Update(blogPost);
                     await _context.SaveChangesAsync();
                 }

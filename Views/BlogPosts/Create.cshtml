@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     tinymce.init({
@@ -48,6 +48,11 @@
                 <label asp-for="body" class="control-label"></label>
                 <textarea asp-for="body" class="form-control"></textarea>
                 <span asp-validation-for="body" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="draft" class="control-label"></label>
+                <input asp-for="draft" type="checkbox" />
+                <span asp-validation-for="draft" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -13,6 +13,11 @@ namespace ASPLiteBlog.Controllers
             _logger = logger;
         }
 
+        public IActionResult Home()
+        {
+            return RedirectToAction("Index", "BlogPosts");
+        }
+
         public IActionResult Privacy()
         {
             return View();

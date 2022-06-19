@@ -29,21 +29,39 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="timeCreated" />
+            <input type="hidden" asp-for="timeLastEdited" />
+            <input type="hidden" asp-for="timePublished" />
+            <input type="hidden" asp-for="timeLastEditedPublished" />
+            <input type="hidden" asp-for="userID" />
+            <input type="hidden" name="oldPreviewPicLoc" value="@Model.previewPicLocation" />
             <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
                 <input asp-for="title" class="form-control" />
                 <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+            <div>
+                <label for="formFile">Preview Picture</label>
+                <input name="formFile" type="file"/>
             </div>
             <div class="form-group">
                 <label asp-for="body" class="control-label"></label>
                 <textarea asp-for="body" class="form-control"></textarea>
                 <span asp-validation-for="body" class="text-danger"></span>
             </div>
+            @if (Model.draft)
+            {
+                <div class="form-group">
+                    <label asp-for="draft" class="control-label"></label>
+                    <input asp-for="draft" type="checkbox" />
+                    <span asp-validation-for="draft" class="text-danger"></span>
+                </div>
+            }
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Update" class="btn btn-primary" />
             </div>
         </form>
     </div>

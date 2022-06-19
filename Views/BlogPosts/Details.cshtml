@@ -17,7 +17,61 @@
         readonly: 1
     });</script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript"></script>
+
+@functions{
+    public string GetProperTimes(){
+        string times = "";
+
+        if (Model.draft)
+        {
+            times += Model.timeCreated.ToString("o");
+
+            if (Model.timeLastEdited != null)
+            {
+                times += $"$ {Model.timeLastEdited?.ToString("o")}";
+            }
+        }
+        else
+        {
+            times += Model.timePublished?.ToString("o");
+
+            if (Model.timeLastEditedPublished != null)
+            {
+                times += $"$ {Model.timeLastEditedPublished?.ToString("o")}";
+            }
+        }
+
+        return times;
+    }
+}
+
+<script>
+    function localizeDateStr(date_to_convert_str) 
+    { 
+        var date_to_convert = new Date(date_to_convert_str); 
+        var local_date = new Date(); 
+        date_to_convert.setHours(date_to_convert.getHours()+local_date.getTimezoneOffset()); 
+        return date_to_convert.toString();
+    } 
+</script>
+
+<script>
+    $( document ).ready(function() {
+        var times = "@GetProperTimes()".split("$")
+
+        if(times.length === 2){
+            times[0] = localizeDateStr(times[0].trim())
+            times[1] = localizeDateStr(times[1].trim())
+            $("#blogTime").text("Created: " + times[0] + " | Last edited: " + times[1])
+        }else{
+            times[0] = localizeDateStr(times[0].trim())
+            $("#blogTime").text("Created: " + times[0])
+        }
+        //console.log(localizeDateStr(times[0]))
+        
+    });
+</script>
 
 <h1>Details</h1>
 
@@ -25,15 +79,14 @@
     <h4>BlogPost</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.title)
-        </dt>
+        <dd class = "col-sm-10">
+            <div id="blogTime">
+
+            </div>
+        </dd>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.title)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.body)
-        </dt>
         @*<dd class = "col-sm-10">
             @Html.DisplayFor(model => model.body)
         </dd>*@
@@ -42,12 +95,9 @@
                 @Html.Raw(Model.body)
             </div>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.user)
-        </dt>
-        <dd class = "col-sm-10">
+@*        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.user.Email)
-        </dd>
+        </dd>*@
     </dl>
 </div>
 <div>
