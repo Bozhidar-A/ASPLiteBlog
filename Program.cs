@@ -48,6 +48,6 @@ app.MapRazorPages();
 
 app.UseStaticFiles();
 
-StartUp.RUN(app);
+await StartUp.RUN(app);
 
 app.Run();
