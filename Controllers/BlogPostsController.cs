@@ -53,6 +53,7 @@ namespace ASPLiteBlog.Controllers
         }
 
         // GET: BlogPosts/Create
+        [Authorize(Roles = "admin,writer")]
         public IActionResult Create()
         {
             //ViewData["userID"] = new SelectList(_context.Users, "Id", "Id");
