@@ -55,6 +55,9 @@ namespace  ASPLiteBlog.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public static string PersonalData => "PersonalData";
 
+        //custom
+        public static string Privacy => "Privacy";
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -90,6 +93,10 @@ namespace  ASPLiteBlog.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public static string DeletePersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, DeletePersonalData);
+
+        //custom
+        public static string PrivacyNavClass(ViewContext viewContext) => PageNavClass(viewContext, Privacy);
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

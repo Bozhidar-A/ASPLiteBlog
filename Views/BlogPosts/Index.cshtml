@@ -1,9 +1,27 @@
-﻿@*@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env*@
-@model IEnumerable<ASPLiteBlog.Models.BlogPost>
+﻿@model IEnumerable<ASPLiteBlog.Models.BlogPost>
+
+@using Microsoft.AspNetCore.Identity
+@using ASPLiteBlog.Data
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Index";
 }
+@functions{
+    public string GetProperAuthorName()
+    {
+        var appUser = UserManager.FindByNameAsync(User.Identity?.Name!).GetAwaiter().GetResult();
+        //this is very bad and very scuffed, but it works
+
+        if (appUser.displayUsername)
+        {
+            return appUser.UserName;
+        }
+
+        return $"{appUser.firstName} {appUser.lastName}";
+    }
+}
+
 
 <head>
   <link rel="stylesheet" href="~/css/site.css">
@@ -28,7 +46,7 @@
                     <td class="">
                         <div class="FLEXCOLUM">
                             <b>@Html.DisplayFor(modelItem => item.title)</b>
-                            @Html.DisplayFor(modelItem => item.userID)
+                            @GetProperAuthorName()
                         </div>
                 
                     </td>
@@ -37,7 +55,6 @@
             {
                 <td style="vertical-align: middle;">
                     <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                     Details |
                     <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                 </td>
             }

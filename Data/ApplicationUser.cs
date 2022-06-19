@@ -8,5 +8,7 @@ namespace ASPLiteBlog.Data
         public string firstName { get; set; }
         [PersonalData]
         public string lastName { get; set; }
+        [PersonalData]
+        public bool displayUsername { get; set; }
     }
 }

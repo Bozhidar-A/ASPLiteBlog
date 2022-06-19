@@ -1,0 +1,20 @@
+﻿@page
+@model ASPLiteBlog.Areas.Identity.Pages.Account.Manage.PrivacyModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+     ViewData["Title"] = "Privacy";
+    ViewData["ActivePage"] = ManageNavPages.Privacy;
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <p>Would you like for your username or full name to be displayed on articles in the author section?</p>
+        <form method="post">
+            <select name="displayChoice" id="displayChoice">
+              <option value="username">username</option>
+              <option value="fullname">full name</option>
+            </select>
+            <input type="submit" value="Update" class="btn btn-primary" />
+        </form>
+    </div>
+</div>
