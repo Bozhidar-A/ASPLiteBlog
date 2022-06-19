@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "Details";
 }
-<link rel="stylesheet" type="text/css" href="~/lib/prism/prism.css">
+<head>
+  <link rel="stylesheet" href="~/css/site.css">
+</head>
 <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     tinymce.init({
@@ -73,34 +75,23 @@
     });
 </script>
 
-<h1>Details</h1>
-
 <div>
-    <h4>BlogPost</h4>
-    <hr />
-    <dl class="row">
-        <dd class = "col-sm-10">
-            <div id="blogTime">
-
-            </div>
-        </dd>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.title)
-        </dd>
-        @*<dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.body)
-        </dd>*@
-         <dd class="col-sm-10">
-            <div id="tinymcebox">
+    <div>
+        <h2>@Html.DisplayFor(model => model.title)</h2>
+        <h4>@Html.DisplayFor(model => model.userID)</h4>
+        <div id="blogTime"></div>
+        <hr />
+        <div id="tinymcebox">
                 @Html.Raw(Model.body)
-            </div>
-        </dd>
-@*        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.user.Email)
-        </dd>*@
-    </dl>
+        </div>
+    </div>
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@if(User.IsInRole("admin") || User.IsInRole("writer"))
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a>
+    </div>
+}
+

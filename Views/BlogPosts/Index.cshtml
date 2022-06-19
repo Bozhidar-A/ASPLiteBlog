@@ -11,48 +11,36 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table WIDTH30PERC">
-    @*<thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.previewPicLocation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.body)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.user)
-            </th>
-            <th></th>
-        </tr>
-    </thead>*@
+@if (User.IsInRole("admin") || User.IsInRole("writer"))
+{
+     <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
+<table>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                <img class="IMG300X300" src="~/@item.previewPicLocation" />
-            </td>
-            <td class="TDCENTER">
-                @Html.DisplayFor(modelItem => item.title)
-            </td>
-@*            <td>
-                @Html.DisplayFor(modelItem => item.body)
-            </td>*@
-@*            <td>
-                @Html.DisplayFor(modelItem => item.user.Id)
-            </td>*@
-            <td style="vertical-align: middle;">
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
+                <tr onclick="location.href = '@Url.Action("Details", "BlogPosts", new {ID = item.ID})'" class="MouseClickIcon">
+                    <td>
+                        <img class="IMG300X300" src="~/@item.previewPicLocation" />
+                    </td>
+                    <td class="">
+                        <div class="FLEXCOLUM">
+                            <b>@Html.DisplayFor(modelItem => item.title)</b>
+                            @Html.DisplayFor(modelItem => item.userID)
+                        </div>
+                
+                    </td>
+                </tr>
+            @if(User.IsInRole("admin") || User.IsInRole("writer"))
+            {
+                <td style="vertical-align: middle;">
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                     Details |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            }
 }
     </tbody>
 </table>

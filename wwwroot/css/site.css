@@ -17,6 +17,10 @@ body {
   margin-bottom: 60px;
 }
 
+table {
+    width: 100%;
+}
+
 .IMG300X300 {
     height: auto;
     width: auto;
@@ -31,4 +35,21 @@ body {
 .TDCENTER {
     text-align: center;
     vertical-align: middle;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    column-gap:50px;
+}
+
+.FLEXCOLUM {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+    text-align:center;
+}
+
+.MouseClickIcon{
+    cursor:pointer;
 }
