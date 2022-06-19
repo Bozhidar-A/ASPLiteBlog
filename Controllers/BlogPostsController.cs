@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ASPLiteBlog.Data;
 using ASPLiteBlog.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPLiteBlog.Controllers
 {
@@ -23,6 +24,9 @@ namespace ASPLiteBlog.Controllers
         }
 
         // GET: BlogPosts
+        [Route("")]
+        [Route("Home")]
+        [Route("Home/Index")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = await _context.BlogPost.Include(b => b.user).ToListAsync();
@@ -60,6 +64,7 @@ namespace ASPLiteBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,writer")]
         public async Task<IActionResult> Create([Bind("ID,title,body,draft")] BlogPost blogPost, IFormFile formFile)
         {
             //var cultureInvariant = CultureInfo.InvariantCulture;
@@ -88,6 +93,7 @@ namespace ASPLiteBlog.Controllers
             return View(blogPost);
         }
 
+        [Authorize(Roles = "admin,writer")]
         public IActionResult UploadFileTinyMCE()
         {
             IFormFile ufile = Request.Form.Files[0];
@@ -131,6 +137,7 @@ namespace ASPLiteBlog.Controllers
          */
 
         [HttpPost]
+        [Authorize(Roles = "admin,writer")]
         public string UploadFile(IFormFile ufile)
         {
             //makes sure the file has a safe name to store
@@ -161,6 +168,7 @@ namespace ASPLiteBlog.Controllers
         }
 
         // GET: BlogPosts/Edit/5
+        [Authorize(Roles = "admin,writer")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.BlogPost == null)
@@ -182,6 +190,7 @@ namespace ASPLiteBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,writer")]
         public async Task<IActionResult> Edit(int id, [Bind("ID," +
             "title," +
             "body," +
@@ -258,6 +267,7 @@ namespace ASPLiteBlog.Controllers
         }
 
         // GET: BlogPosts/Delete/5
+        [Authorize(Roles = "admin,writer")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.BlogPost == null)
@@ -279,6 +289,7 @@ namespace ASPLiteBlog.Controllers
         // POST: BlogPosts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,writer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.BlogPost == null)

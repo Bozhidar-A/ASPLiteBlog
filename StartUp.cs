@@ -16,7 +16,8 @@ namespace ASPLiteBlog
                 var _userStore = serviceScope.ServiceProvider.GetService<IUserStore<ApplicationUser>>();
                 var _userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
                 var _emailStore = serviceScope.ServiceProvider.GetService<IUserEmailStore<ApplicationUser>>();
-                
+                var _roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+
 
                 //make sure the db is created
                 //context.Database.EnsureCreated();
@@ -25,22 +26,38 @@ namespace ASPLiteBlog
                 //migrate with all the changes
                 _context.Database.Migrate();
 
+                //creating roles
+                var adminRole = new IdentityRole("admin");
+                var writerRole = new IdentityRole("writer");
+
+                if (!_context.Roles.Any())
+                {
+                    //added them to DB
+                    await _roleManager.CreateAsync(adminRole);
+                    await _roleManager.CreateAsync(writerRole);
+                }
+
                 //check if there are any users in DB
                 if (!_context.Users.Any())
                 {
                     //create admin
-                    var user = Activator.CreateInstance<ApplicationUser>();
-                    await _userStore.SetUserNameAsync(user, "admin", CancellationToken.None);
-                    //_emailStore.SetEmailAsync(user, "admin@admin.com", CancellationToken.None);
-                    user.Email = "admin@admin.com";
-                    user.NormalizedEmail = "admin@admin.com";
+                    var adminUser = Activator.CreateInstance<ApplicationUser>();
+                    await _userStore.SetUserNameAsync(adminUser, "admin", CancellationToken.None);
 
-                    user.EmailConfirmed = true;//short circuiting a bit here
+                    //short circuiting a bit here
+                    //policy needs both a strong password AND confirmed email. Can change that, but I prefer to keep it on
+                    adminUser.Email = "admin@admin.com";
+                    adminUser.NormalizedEmail = "admin@admin.com";
+                    adminUser.EmailConfirmed = true;
 
-                    user.firstName = "admin";
-                    user.lastName = "admin";
+                    adminUser.firstName = "admin";
+                    adminUser.lastName = "admin";
 
-                    await _userManager.CreateAsync(user, "Admin123!");
+                    //create user
+                    await _userManager.CreateAsync(adminUser, "Admin123!");
+
+                    //add to role
+                    await _userManager.AddToRoleAsync(adminUser, adminRole.Name);
                 }
             }
         }
