@@ -8,9 +8,9 @@
     ViewData["Title"] = "Index";
 }
 @functions{
-    public string GetProperAuthorName()
+    public string GetProperAuthorName(string userID)
     {
-        var appUser = UserManager.FindByNameAsync(User.Identity?.Name!).GetAwaiter().GetResult();
+        var appUser = UserManager.FindByIdAsync(userID).GetAwaiter().GetResult();
         //this is very bad and very scuffed, but it works
 
         if (appUser.displayUsername)
@@ -46,9 +46,8 @@
                     <td class="">
                         <div class="FLEXCOLUM">
                             <b>@Html.DisplayFor(modelItem => item.title)</b>
-                            @GetProperAuthorName()
+                            @GetProperAuthorName(item.userID)
                         </div>
-                
                     </td>
                 </tr>
             @if(User.IsInRole("admin") || User.IsInRole("writer"))

@@ -51,9 +51,9 @@
         return times;
     }
 
-    public string GetProperAuthorName()
+    public string GetProperAuthorName(string userID)
     {
-        var appUser = UserManager.FindByNameAsync(User.Identity?.Name!).GetAwaiter().GetResult();
+        var appUser = UserManager.FindByIdAsync(userID).GetAwaiter().GetResult();
         //this is very bad and very scuffed, but it works
 
         if (appUser.displayUsername)
@@ -94,7 +94,7 @@
 <div>
     <div>
         <h2>@Html.DisplayFor(model => model.title)</h2>
-        <h4>@GetProperAuthorName()</h4>
+        <h4>@GetProperAuthorName(Model.userID)</h4>
         <div id="blogTime"></div>
         <hr />
         <div id="tinymcebox">

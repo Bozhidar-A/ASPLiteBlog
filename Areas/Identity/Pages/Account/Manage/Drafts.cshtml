@@ -1,0 +1,31 @@
+﻿@page
+@model ASPLiteBlog.Areas.Identity.Pages.Account.Manage.DraftsModel
+@{
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <table>
+            <tbody>
+                @foreach(var item in Model.drafts)
+                {
+                    <br />
+                    <tr onclick="location.href = '@Url.Action("Details", "BlogPosts", new {ID = item.ID})'" class="MouseClickIcon">
+                        <td>
+                            <img class="IMG300X300" src="~/@item.previewPicLocation" />
+                        </td>
+                        <td class="">
+                            <div class="FLEXCOLUM">
+                                <b>@Html.DisplayFor(modelItem => item.title)</b>
+                            </div>
+                        </td>
+                        <td>
+                            <a asp-controller="BlogPosts" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                            <a asp-controller="BlogPosts" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

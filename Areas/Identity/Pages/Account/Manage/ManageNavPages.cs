@@ -58,6 +58,12 @@ namespace  ASPLiteBlog.Areas.Identity.Pages.Account.Manage
         //custom
         public static string Privacy => "Privacy";
 
+        public static string Published => "Published";
+
+        public static string Drafts => "Drafts";
+
+        public static string ManageUsers => "ManageUsers";
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -96,6 +102,12 @@ namespace  ASPLiteBlog.Areas.Identity.Pages.Account.Manage
 
         //custom
         public static string PrivacyNavClass(ViewContext viewContext) => PageNavClass(viewContext, Privacy);
+
+        public static string PublishedNavClass(ViewContext viewContext) => PageNavClass(viewContext, Published);
+
+        public static string DraftsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Drafts);
+
+        public static string ManageUsersNavClass(ViewContext viewContext) => PageNavClass(viewContext, ManageUsers);
 
 
         /// <summary>

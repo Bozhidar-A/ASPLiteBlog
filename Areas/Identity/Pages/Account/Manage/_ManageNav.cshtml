@@ -12,5 +12,14 @@
     }
     <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.PrivacyNavClass(ViewContext)" id="personal-data" asp-page="./Privacy">Privacy</a></li>
+    @if(User.IsInRole("admin") || User.IsInRole("writer"))
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.PublishedNavClass(ViewContext)" id="published" asp-page="./Published">Published posts</a></li>
+        <li class="nav-item"><a class="nav-link @ManageNavPages.DraftsNavClass(ViewContext)" id="drafts" asp-page="./Drafts">Drafts</a></li>
+    }
+    @if (User.IsInRole("admin"))
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.ManageUsersNavClass(ViewContext)" id="manage-users" asp-page="./ManageUsers">Manage Users</a></li>
+    }
+    <li class="nav-item"><a class="nav-link @ManageNavPages.PrivacyNavClass(ViewContext)" id="privacy" asp-page="./Privacy">Privacy</a></li>
 </ul>

@@ -18,7 +18,7 @@ body {
 }
 
 table {
-    width: 100%;
+    width: 50%;
 }
 
 .IMG300X300 {
@@ -48,6 +48,12 @@ table {
     flex-direction: column;
     row-gap: 30px;
     text-align:center;
+}
+
+.FLEXROWNOGAP {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
 }
 
 .MouseClickIcon{
