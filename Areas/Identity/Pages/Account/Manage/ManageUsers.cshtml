@@ -1,0 +1,54 @@
+﻿@page
+@model ASPLiteBlog.Areas.Identity.Pages.Account.Manage.ManageUsersModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="POST">
+            
+            @foreach(var item in Model.Input.users)
+            {
+                  <div class="FLEXROWNOGAP">
+                      <p>@item.firstName "@item.UserName" @item.lastName</p>
+                      <p>@item.NormalizedEmail</p>
+                      <p>@item.Id</p>
+                      @*<p>@String.Join(", ", Model.roles[item.Id].ToArray());</p>*@
+
+                        @*roles*@
+                        @if (Model.Input.roles[item.Id].admin)
+                        {
+                            <input type="checkbox" id="admin-@item.Id" asp-for="@Model.Input.roles[item.Id].admin" checked/>
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="admin-@item.Id"  asp-for="@Model.Input.roles[item.Id].admin"/>
+                        }
+                        <label for="admin-@item.Id">Admin</label>
+
+                        @if (Model.Input.roles[item.Id].writer)
+                        {
+                            <input type="checkbox" id="writer-@item.Id" asp-for="@Model.Input.roles[item.Id].writer" checked/>
+                        }
+                        else
+                        {
+                            <input type="checkbox" id="writer-@item.Id" asp-for="@Model.Input.roles[item.Id].writer"/>
+                        }
+                        <label for="writer-@item.Id">Writer</label>
+
+                        @if (item.LockoutEnabled)
+                        {
+                            <button type="submit" asp-route-userID="@item.Id" asp-page-handler="UNBAN" class="btn btn-primary">UNBAN</button>
+                        }
+                        else
+                        {
+                            <button type="submit" asp-route-userID="@item.Id" asp-page-handler="BAN" class="btn btn-primary">BAN</button>
+                        }
+
+                  </div>
+            }
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Update</button>
+        </form>
+    </div>
+</div>
