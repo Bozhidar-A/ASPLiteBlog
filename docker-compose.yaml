@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  ms-sql-server:
+    image: mcr.microsoft.com/mssql/server
+    volumes:
+      - aspliteblog_db_volume:/var/opt/mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Pa55w0rd2019"
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+  aspliteblog_dlls:
+    build: .
+    ports:
+      - "8080:80"
+    depends_on:
+      - "ms-sql-server"
+    restart: always
+    volumes:
+      - aspliteblog_wwwroot_volume:/app/wwwroot/media
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+volumes:
+  authtest_db_volume:
+  authtest_wwwroot_volume:
