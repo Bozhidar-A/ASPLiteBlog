@@ -9,6 +9,8 @@ using ASPLiteBlog.Data;
 using ASPLiteBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using PagedList;
+using X.PagedList;
 
 namespace ASPLiteBlog.Controllers
 {
@@ -27,15 +29,26 @@ namespace ASPLiteBlog.Controllers
         [Route("")]
         [Route("Home")]
         [Route("Home/Index")]
-        public async Task<IActionResult> Index(string nameSearch)
+        public async Task<IActionResult> Index(int? page, string nameSearch)
         {
-            ViewData["CurrentFilter"] = nameSearch;
 
-            var applicationDbContext = await _context.BlogPost.
+            if(nameSearch == null || ViewBag.CurrentFilter != nameSearch)
+            {
+                page = 1;
+            }
+
+            ViewBag.CurrentFilter = nameSearch;
+
+
+            var res = await _context.BlogPost.
                 Include(b => b.user).
                 Where(x => x.title.Contains(nameSearch ?? "")).
                 ToListAsync();
-            return View(applicationDbContext);
+            //return View(applicationDbContext);
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(res.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: BlogPosts/Details/5

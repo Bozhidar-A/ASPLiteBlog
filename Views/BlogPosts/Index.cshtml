@@ -1,4 +1,8 @@
-﻿@model IEnumerable<ASPLiteBlog.Models.BlogPost>
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@*@model IEnumerable<ASPLiteBlog.Models.BlogPost>*@
+@model IPagedList<ASPLiteBlog.Models.BlogPost>
+
 
 @using Microsoft.AspNetCore.Identity
 @using ASPLiteBlog.Data
@@ -37,7 +41,7 @@
 }
 
 <form asp-controller="BlogPosts" asp-action="Index">
-    <input name="nameSearch" value="@ViewData["CurrentFilter"]" />
+    <input name="nameSearch" value="@ViewBag.CurrentFilter" />
 </form>
 
 <table>
@@ -64,3 +68,6 @@
 }
     </tbody>
 </table>
+
+<br />
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }) )
