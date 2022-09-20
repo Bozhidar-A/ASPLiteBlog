@@ -27,9 +27,14 @@ namespace ASPLiteBlog.Controllers
         [Route("")]
         [Route("Home")]
         [Route("Home/Index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameSearch)
         {
-            var applicationDbContext = await _context.BlogPost.Include(b => b.user).ToListAsync();
+            ViewData["CurrentFilter"] = nameSearch;
+
+            var applicationDbContext = await _context.BlogPost.
+                Include(b => b.user).
+                Where(x => x.title.Contains(nameSearch ?? "")).
+                ToListAsync();
             return View(applicationDbContext);
         }
 

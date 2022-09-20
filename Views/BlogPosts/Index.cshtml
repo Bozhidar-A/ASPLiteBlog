@@ -36,6 +36,10 @@
     </p>
 }
 
+<form asp-controller="BlogPosts" asp-action="Index">
+    <input name="nameSearch" value="@ViewData["CurrentFilter"]" />
+</form>
+
 <table>
     <tbody>
 @foreach (var item in Model) {
