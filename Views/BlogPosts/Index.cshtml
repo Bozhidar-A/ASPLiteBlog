@@ -26,6 +26,7 @@
     }
 }
 
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 <head>
   <link rel="stylesheet" href="~/css/site.css">
@@ -41,7 +42,9 @@
 }
 
 <form asp-controller="BlogPosts" asp-action="Index">
-    <input name="nameSearch" value="@ViewBag.CurrentFilter" />
+    <input name="nameSearch" value="@ViewData["CurrentFilter"]" />
+    <input name="prevNameSearch" value="@ViewData["CurrentFilter"]" hidden />
+    <button type="submit">Search</button>
 </form>
 
 <table>
@@ -70,4 +73,4 @@
 </table>
 
 <br />
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }) )
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page, nameSearch = ViewData["CurrentFilter"], prevNameSearch = ViewData["CurrentFilter"]}) )
