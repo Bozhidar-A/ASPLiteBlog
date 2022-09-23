@@ -42,10 +42,15 @@
 }
 
 <form asp-controller="BlogPosts" asp-action="Index">
-    <input name="nameSearch" value="@ViewData["CurrentFilter"]" />
+    <label for="nameSearch">Post name:</label><br>
+    <input id="nameSearch" name="nameSearch" value="@ViewData["CurrentFilter"]" /><br>
     <input name="prevNameSearch" value="@ViewData["CurrentFilter"]" hidden />
     <button type="submit">Search</button>
 </form>
+
+<br />
+<br />
+@*this is VERY BAD*@
 
 <table>
     <tbody>
