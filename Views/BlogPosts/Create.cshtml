@@ -22,9 +22,16 @@
         remove_script_host: false,
         paste_data_images: true,
         //without relative and host scipts in .net core <img> are broken
-
-        images_upload_url: "@Url.Action("UploadFileTinyMCE", "Posts")"
-    });        
+        images_upload_url: "@Url.Action("UploadFileTinyMCE", "BlogPosts")"
+    });
+    
+    function OnPostTinyMCE(){
+        tinymce.activeEditor.uploadImages().then(() => {
+            document.getElementById("blogPostForm").submit();
+            //document.forms[0].submit();
+        })
+        return false;
+    }
 </script>
 
 <h1>Create</h1>
@@ -42,7 +49,7 @@
             </div>
             <div>
                 <label for="formFile">Preview Picture</label>
-                <input name="formFile" required type="file"/>
+                <input name="formFile" required type="file" accept="image/*" />
             </div>
             <div class="form-group">
                 <label asp-for="body" class="control-label"></label>
@@ -55,7 +62,7 @@
                 <span asp-validation-for="draft" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="button" value="Create" class="btn btn-primary" onclick="OnPostTinyMCE()" />
             </div>
         </form>
     </div>

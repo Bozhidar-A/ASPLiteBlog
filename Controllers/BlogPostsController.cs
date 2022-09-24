@@ -110,7 +110,9 @@ namespace ASPLiteBlog.Controllers
             return View(blogPost);
         }
 
+        [HttpPost]
         [Authorize(Roles = "admin,writer")]
+        [DisableRequestSizeLimit]
         public IActionResult UploadFileTinyMCE()
         {
             IFormFile ufile = Request.Form.Files[0];
@@ -316,6 +318,29 @@ namespace ASPLiteBlog.Controllers
             var blogPost = await _context.BlogPost.FindAsync(id);
             if (blogPost != null)
             {
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(blogPost.body);
+                
+                var imgs = doc.DocumentNode.SelectNodes("//img");
+
+                foreach(var img in imgs)
+                {
+                    //this kinda bads since we already have /media/, but this works and its understandable
+                    var cleanedMediaFile = $"media/{img.Attributes["src"].Value.Split("/").Last()}";
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", cleanedMediaFile);
+                    //on windows System.IO.File functions seem to have built in handling for the mismatched slashes
+
+                    //this check shouldn't be necessary 
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+
+                //delete preview
+                var prevPicLoc = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", blogPost.previewPicLocation);
+                System.IO.File.Delete(prevPicLoc);
+
                 _context.BlogPost.Remove(blogPost);
             }
             
