@@ -7,7 +7,7 @@ services:
       - aspliteblog_db_volume:/var/opt/mssql
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "Pa55w0rd2019"
+      SA_PASSWORD: "$5J8Q%*vZbva"
       MSSQL_PID: Express
     ports:
       - "1433:1433"
@@ -21,7 +21,7 @@ services:
     volumes:
       - aspliteblog_wwwroot_volume:/app/wwwroot/media
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Production
 
 volumes:
   authtest_db_volume:
