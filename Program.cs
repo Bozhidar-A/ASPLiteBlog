@@ -15,9 +15,6 @@ if (builder.Environment.IsDevelopment())
 }
 else
 {
-    //connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); 
-
-    //connectionString = $"Server=ms-sql-server;Database=AppDbContext;User=sa;Password={Environment.GetEnvironmentVariable("DB_PASS")};";
     connectionString = $"Server=ms-sql-server,1433;Initial Catalog=master;User ID =SA;Password={Environment.GetEnvironmentVariable("DB_PASS")}";
 }
 

@@ -23,7 +23,6 @@ services:
     volumes:
       - aspliteblog_wwwroot_volume:/app/wwwroot/media
     environment:
-      #ASPNETCORE_ENVIRONMENT: Production
       DB_PASS: kww7e6M9sjJW
 
 volumes:
