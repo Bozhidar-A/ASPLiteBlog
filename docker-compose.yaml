@@ -3,26 +3,29 @@ version: "3"
 services:
   ms-sql-server:
     image: mcr.microsoft.com/mssql/server
+    #mssql just quits if the host does not have 2GB of RAM, this stubs that check
+    #image: justin2004/mssql_server_tiny
     volumes:
       - aspliteblog_db_volume:/var/opt/mssql
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "$5J8Q%*vZbva"
+      SA_PASSWORD: "kww7e6M9sjJW"
       MSSQL_PID: Express
     ports:
       - "1433:1433"
   aspliteblog_dlls:
     build: .
     ports:
-      - "8080:80"
+      - "5959:80"
     depends_on:
-      - "ms-sql-server"
+      - ms-sql-server
     restart: always
     volumes:
       - aspliteblog_wwwroot_volume:/app/wwwroot/media
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      #ASPNETCORE_ENVIRONMENT: Production
+      DB_PASS: kww7e6M9sjJW
 
 volumes:
-  authtest_db_volume:
-  authtest_wwwroot_volume:
+  aspliteblog_db_volume:
+  aspliteblog_wwwroot_volume:

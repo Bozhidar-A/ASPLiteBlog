@@ -7,8 +7,19 @@ using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-//var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = "";
+
+if (builder.Environment.IsDevelopment())
+{
+    connectionString = builder.Configuration.GetConnectionString("DevCon");
+}
+else
+{
+    //connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); 
+
+    //connectionString = $"Server=ms-sql-server;Database=AppDbContext;User=sa;Password={Environment.GetEnvironmentVariable("DB_PASS")};";
+    connectionString = $"Server=ms-sql-server,1433;Initial Catalog=master;User ID =SA;Password={Environment.GetEnvironmentVariable("DB_PASS")}";
+}
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
     options.UseSqlServer(connectionString);
