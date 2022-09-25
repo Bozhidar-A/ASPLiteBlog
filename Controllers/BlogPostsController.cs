@@ -42,9 +42,8 @@ namespace ASPLiteBlog.Controllers
                 Include(b => b.user).
                 Where(x => x.title.Contains(nameSearch ?? "")).
                 ToListAsync();
-            //return View(applicationDbContext);
 
-            int pageSize = 1;
+            int pageSize = 5;
             int pageNumber = (page ?? 1);
             return View(res.ToPagedList(pageNumber, pageSize));
         }
@@ -72,7 +71,6 @@ namespace ASPLiteBlog.Controllers
         [Authorize(Roles = "admin,writer")]
         public IActionResult Create()
         {
-            //ViewData["userID"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -84,8 +82,6 @@ namespace ASPLiteBlog.Controllers
         [Authorize(Roles = "admin,writer")]
         public async Task<IActionResult> Create([Bind("ID,title,body,draft")] BlogPost blogPost, IFormFile formFile)
         {
-            //var cultureInvariant = CultureInfo.InvariantCulture;
-
             blogPost.userID = _userManager.GetUserId(User);
             //use this to get the userID and link the user to the model
 
@@ -106,7 +102,6 @@ namespace ASPLiteBlog.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["userID"] = new SelectList(_context.Users, "Id", "Id", blogPost.userID);
             return View(blogPost);
         }
 
@@ -200,7 +195,6 @@ namespace ASPLiteBlog.Controllers
             {
                 return NotFound();
             }
-            //ViewData["userID"] = new SelectList(_context.Users, "Id", "Id", blogPost.userID);
             return View(blogPost);
         }
 
@@ -281,7 +275,6 @@ namespace ASPLiteBlog.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["userID"] = new SelectList(_context.Users, "Id", "Id", blogPost.userID);
             return View(blogPost);
         }
 

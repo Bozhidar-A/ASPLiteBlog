@@ -69,6 +69,7 @@ namespace ASPLiteBlog.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             //[EmailAddress]
+            [Display(Name = "Email or Username")]
             public string Email_or_Username { get; set; }
 
             /// <summary>
